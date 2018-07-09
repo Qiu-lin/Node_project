@@ -1,6 +1,8 @@
 //构造函数
-function () {
-
+function header() {
+  this.creatDom();
+  this.creatLoginModal();
+  this.creatRegistModal();
 }
 //头部布局结构模板
 header.template = `<nav class="navbar navbar-inverse">
@@ -17,10 +19,10 @@ header.template = `<nav class="navbar navbar-inverse">
   <div class="collapse navbar-collapse" id="position-nav">
     <ul class="nav navbar-nav">
       <li class="active">
-        <a href="#">首页</a>
+        <a href="/">首页</a>
       </li>
       <li>
-        <a href="#">职位管理</a>
+        <a href="/html/position.html">职位管理</a>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
@@ -37,7 +39,13 @@ header.template = `<nav class="navbar navbar-inverse">
 
 //原型继承
 $.extend( header.prototype, {
-  creatDom:function () {
-    $(header.template)
+  creatDom: function () {
+    $( header.template ).appendTo( ".header" );
+  },
+  creatLoginModal: function () {
+    new loginModal();
+  },
+  creatRegistModal: function () {
+    new registModal();
   }
-})
+} );
