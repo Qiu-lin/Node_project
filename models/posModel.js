@@ -11,7 +11,13 @@ const posModel = {
   save:function (positionInfo,success,error) {
     const $pos = new $position( positionInfo );
     $pos.save( ( err, data ) => {
-
-     })
+      if ( err ) {
+        error( err );
+        return;
+      }
+      success( data );
+    } );
   }
 }
+
+module.exports = posModel;
