@@ -22,6 +22,24 @@ const posController = {
           res_body: {}
         } );
       } );
-  }
+  },
+
+  list: function ( req, res, next ) {
+    const { pageIndex } = req.query;
+    posModel.findByPage( pageIndex, ( data ) => {
+      res.json( {
+        res_code: 0,
+        res_error: "",
+        res_body: data
+      } )
+    }, ( err ) => {
+      res.json( {
+        res_code: -1,
+        res_error: err,
+        res_body: {}
+      } )
+    } );
+   }
+
 };
 module.exports = posController;

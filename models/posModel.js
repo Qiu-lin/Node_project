@@ -18,6 +18,12 @@ const posModel = {
       }
       success( data );
     } );
-  }
+  },
+  findByPage: function ( pageIndex, success, error ) {
+    const pageSize = 5;
+    $position.find().limit( pageSize )
+      .skip( ( pageIndex - 1 ) * pageSize )
+      .then( success, error );
+    }
 }
 module.exports = posModel;
