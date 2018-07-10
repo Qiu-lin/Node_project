@@ -14,7 +14,7 @@
   <div class="container header"></div>
   <div class="container">
     <h4 class="pull-left" style="margin-top: 0px;margin-bottom: 0px;line-height: 34px;">职位管理</h4>
-    <a type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addPosModel">添加</a>
+    <a type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addPosModal">添加</a>
   </div>
   <div class="table-responsive container">
     <table class="table table-bordered table-hover">
@@ -52,15 +52,7 @@
     </table>
   </div>
 
-
-  <script src="/lib/jquery/jquery-1.12.4.min.js"></script>
-  <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/js/common/loginModal.js"></script>
-  <script src="/js/common/registModal.js"></script>
-  <script src="/js/common/header.js"></script>
-  <script src="/js/position/position.js"></script>
-
-  <div class="modal fade" tabindex="-1" role="dialog" id="addPosModel">
+  <div class="modal fade" tabindex="-1" role="dialog" id="addPosModal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -71,32 +63,40 @@
           </div>
           <div class="modal-body">
             <div class="alert alert-danger hide add_pos_error" role="alert">职位添加失败，请稍后重试...</div>
-            <form class="add_posr_form">
+            <form class="add_pos_form">
               <div class="form-group">
                 <label for="addPosLogo">logo</label>
-                <input type="file" class="form-control" id="addPosLogo" placeholder="logo">
+                <input type="file" class="form-control" name="logo" id="addPosLogo" placeholder="logo">
               </div>
               <div class="form-group">
                 <label for="addPosName">职位名称</label>
-                <input type="password" class="form-control" id="addPosName" placeholder="职位名称">
+                <input type="text" class="form-control" name="position" id="addPosName" placeholder="职位名称">
               </div>
               <div class="form-group">
                 <label for="addPosCompany">公司名称</label>
-                <input type="password" class="form-control" id="addPosCompany" placeholder="公司名称">
+                <input type="text" class="form-control" name="company" id="addPosCompany" placeholder="公司名称">
               </div>
               <div class="form-group">
                 <label for="addPosSalary">薪资</label>
-                <input type="email" class="form-control" id="addPosSalary" placeholder="薪资">
+                <input type="text" class="form-control" name="salary" id="addPosSalary" placeholder="薪资">
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary btn_register">注册</button>
+            <button type="button" class="btn btn-primary btn_add_pos" >添加</button>
           </div>
         </div>
       </div>
     </div>
+
+
+  <script src="/lib/jquery/jquery-1.12.4.min.js"></script>
+  <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/js/common/loginModal.js"></script>
+  <script src="/js/common/registModal.js"></script>
+  <script src="/js/common/header.js"></script>
+  <script src="/js/position/position.js"></script>
 </body>
 
 </html>

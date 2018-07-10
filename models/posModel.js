@@ -1,9 +1,10 @@
 const mongoose = require( "mongoose" );
-mongoose.connect( "mongodb://localhost:27017/postionDatabase" );
-const schema = mongoose.schema( {
+mongoose.connect( "mongodb://localhost:27017/positionDatabase" );
+const schema = mongoose.Schema( {
   position: String,
   company: String,
-  salary: Number
+  salary: Number,
+  logo:String
 } );
 const $position = mongoose.model( "position", schema );
 
@@ -19,5 +20,4 @@ const posModel = {
     } );
   }
 }
-
 module.exports = posModel;

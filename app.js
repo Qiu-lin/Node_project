@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 /*************使用路由中间件****************/
 // app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
-app.use( "/api/position", posRouter );
+app.use( '/api/positions', posRouter );
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
