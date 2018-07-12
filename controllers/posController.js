@@ -2,12 +2,11 @@ const posModel = require( "../models/posModel" );
 
 const posController = {
   add: function ( req, res, next ) {
-    const { position, company, salary } = req.body;
+    const { position, company, salary,site,experience,type } = req.body;
     let logo = "";
     if ( req.file )
       logo = "/upload/" + req.file.filename;
-    posModel.save(
-      { position, company, salary, logo },
+    posModel.save({ position, company, salary, logo,site,experience,type },
       ( data ) => {
         res.json( {
           res_code: 0,
@@ -23,7 +22,6 @@ const posController = {
         } );
       } );
   },
-
   list: function ( req, res, next ) {
     const { pageIndex } = req.query;
     posModel.findByPage( pageIndex, ( data ) => {
@@ -39,6 +37,38 @@ const posController = {
         res_body: {}
       } )
     } );
+  },
+  find: function ( req, res, next ) {
+    const {id}  = req.query;
+    posModel.findById( id, ( data ) => {
+      res.json( {
+        res_code: 0,
+        res_error: "",
+        res_body: data
+      } )
+    }, ( err ) => {
+      res.json( {
+        res_code: -1,
+        res_error: err,
+        res_body: {}
+      } )
+    } );
+  },
+  delete: function ( req, res, next ) {
+    const {id}  = req.query;
+    posModel.deleteById( id, (data)=> {
+      res.json( {
+        res_code: 0,
+        res_error: "",
+        res_body: "delete success"
+      } )
+    }, ( err ) => {
+      res.json( {
+        res_code: -1,
+        res_error: err,
+        res_body: {}
+      } )
+    });
    }
 
 };

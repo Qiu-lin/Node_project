@@ -17,7 +17,7 @@
     <a type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addPosModal">添加</a>
   </div>
   <div class="table-responsive container">
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover pos_tab">
       <thead>
         <tr>
           <th>序号</th>
@@ -28,71 +28,157 @@
           <th>职位类型</th>
           <th>工作地点</th>
           <th>职位薪资</th>
-          <th>操作</th>
+          <th colspan="2">操作</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>
-            <img src="/img/logo.jpg" style="width: 60px;">
-          </td>
-          <td>asdfad</td>
-          <td>add</td>
-          <td>gfhdgh</td>
-          <td>dafaff</td>
-          <td>ddddf</td>
-          <td>ffaaaf</td>
-          <td>
-            <a href="javascript:void(0);">修改</a>
-            <a href="javascript:void(0);">删除</a>
-          </td>
-        </tr>
+        <!-- 动态渲染 -->
       </tbody>
     </table>
+
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li  class="active"><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+      </ul>
+    </nav>
   </div>
 
+  <script type="text/html" id="position_list_temp">
+    {{each list pos index}}
+    <tr>
+      <td style="display:none;" class="currID">{{pos._id}}</td>
+      <td>{{index + 1}}</td>
+      <td><img src="{{pos.logo}}" style="width: 60px;"></td>
+      <td>{{pos.position}}</td>
+      <td>{{pos.company}}</td>
+      <td>{{pos.experience}}</td>
+      <td>{{pos.type}}</td>
+      <td>{{pos.site}}</td>
+      <td>{{pos.salary}}</td>
+      <td class="modifyPos">
+        <a href="javascript:void(0);"  data-toggle="modal" data-target="#modifyModal">修改</a>
+      </td>
+      <td class="delete">
+        <a href="javascript:void(0);">删除</a>
+      </td>
+    </tr>
+    {{/each}}
+  </script>
+<!-- 添加职位模态框 -->
   <div class="modal fade" tabindex="-1" role="dialog" id="addPosModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-            <h4 class="modal-title">添加职位</h4>
-          </div>
-          <div class="modal-body">
-            <div class="alert alert-danger hide add_pos_error" role="alert">职位添加失败，请稍后重试...</div>
-            <form class="add_pos_form">
-              <div class="form-group">
-                <label for="addPosLogo">logo</label>
-                <input type="file" class="form-control" name="logo" id="addPosLogo" placeholder="logo">
-              </div>
-              <div class="form-group">
-                <label for="addPosName">职位名称</label>
-                <input type="text" class="form-control" name="position" id="addPosName" placeholder="职位名称">
-              </div>
-              <div class="form-group">
-                <label for="addPosCompany">公司名称</label>
-                <input type="text" class="form-control" name="company" id="addPosCompany" placeholder="公司名称">
-              </div>
-              <div class="form-group">
-                <label for="addPosSalary">薪资</label>
-                <input type="text" class="form-control" name="salary" id="addPosSalary" placeholder="薪资">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary btn_add_pos" >添加</button>
-          </div>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+          <h4 class="modal-title">添加职位</h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger hide add_pos_error" role="alert">职位添加失败，请稍后重试...</div>
+          <form class="add_pos_form">
+            <div class="form-group">
+              <label for="addPosLogo">公司logo</label>
+              <input type="file" class="form-control" name="logo" id="addPosLogo" placeholder="logo">
+            </div>
+            <div class="form-group">
+              <label for="addPosName">职位名称</label>
+              <input type="text" class="form-control" name="position" id="addPosName" placeholder="职位名称">
+            </div>
+            <div class="form-group">
+              <label for="addPosCompany">公司名称</label>
+              <input type="text" class="form-control" name="company" id="addPosCompany" placeholder="公司名称">
+            </div>
+            <div class="form-group">
+              <label for="posExperience">工作经验</label>
+              <input type="text" class="form-control" name="experience" id="posExperience" placeholder="工作经验">
+            </div>
+            <div class="form-group">
+              <label for="posType">职位类型</label>
+              <input type="text" class="form-control" name="type" id="posType" placeholder="职位类型">
+            </div>
+            <div class="form-group">
+              <label for="posSite">工作地点</label>
+              <input type="text" class="form-control" name="site" id="posSite" placeholder="工作地点">
+            </div>
+            <div class="form-group">
+              <label for="addPosSalary">薪资</label>
+              <input type="text" class="form-control" name="salary" id="addPosSalary" placeholder="薪资">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary btn_add_pos" >添加</button>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 修改职位模态框 -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="modifyModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+          <h4 class="modal-title">修改职位信息</h4>
+        </div>
+        <div class="modal-body">
+          <img src="/img/logo.png" class="img-rounded center-block" id="logoImg" style="width: 80px;">
+          <div class="alert alert-danger hide add_pos_error" role="alert">职位修改失败，请稍后重试...</div>
+          <form class="modifyPosForm">
+            <div class="form-group" style="display: none;">
+              <label for="modifyPosID">ID</label>
+              <input type="text" class="form-control" name="id" id="modifyPosID" >
+            </div>
+            <div class="form-group">
+              <label for="modifyPosLogo">修改公司logo</label>
+              <input type="file" class="form-control" name="logo" id="modifyPosLogo" >
+            </div>
+            <div class="form-group">
+              <label for="modifyPosName">修改职位名称</label>
+              <input type="text" class="form-control" name="position" id="modifyPosName" placeholder="更新职位名称">
+            </div>
+            <div class="form-group">
+              <label for="modifyPosCompany">修改公司名称</label>
+              <input type="text" class="form-control" name="company" id="modifyPosCompany" placeholder="更新公司名称">
+            </div>
+            <div class="form-group">
+              <label for="modifyPosExperience">修改工作经验</label>
+              <input type="text" class="form-control" name="experience" id="modifyPosExperience" placeholder="更新工作经验">
+            </div>
+            <div class="form-group">
+              <label for="modifyPosType">修改职位类型</label>
+              <input type="text" class="form-control" name="type" id="modifyPosType" placeholder="更新职位类型">
+            </div>
+            <div class="form-group">
+              <label for="modifyPosSite">修改工作地点</label>
+              <input type="text" class="form-control" name="site" id="modifyPosSite" placeholder="更新工作地点">
+            </div>
+            <div class="form-group">
+              <label for="modifyPosSalary">修改薪资</label>
+              <input type="text" class="form-control" name="salary" id="modifyPosSalary" placeholder="更新薪资">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary btn_modify_pos" >修改</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <script src="/lib/jquery/jquery-1.12.4.min.js"></script>
   <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/lib/artTemplate/template-web.js"></script>
   <script src="/js/common/loginModal.js"></script>
   <script src="/js/common/registModal.js"></script>
   <script src="/js/common/header.js"></script>

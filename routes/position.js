@@ -17,6 +17,7 @@ var upload = multer( { storage: storage } );
 
 router.post( "/add",upload.single("logo") ,posController.add );
 router.get( "/list", posController.list );
-
+router.get( "/find",  posController.find);
+router.get( "/delete",  posController.delete);
 
 module.exports = router;

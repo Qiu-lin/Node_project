@@ -3,6 +3,8 @@ function header() {
   this.creatDom();
   this.creatLoginModal();
   this.creatRegistModal();
+  this.checkLogin();
+  this.addListener();
 }
 //头部布局结构模板
 header.template = `<nav class="navbar navbar-inverse">
@@ -33,6 +35,10 @@ header.template = `<nav class="navbar navbar-inverse">
         <a href="javascript:void(0);">注册</a>
       </li>
     </ul>
+    <ul class="nav navbar-nav navbar-right hide login_success">
+      <li><a href="#">欢迎您：</a></li>
+      <li class="logout_link"><a href="#">退出</a></li>
+    </ul>
   </div>
 </div>
 </nav>`;
@@ -47,5 +53,21 @@ $.extend( header.prototype, {
   },
   creatRegistModal: function () {
     new registModal();
-  }
+  },
+  addListener: function () {
+    $( ".logout_link" ).on( "click",this.handleLogout );
+  },
+  handleLogout: function () {
+    $.get( "/api/users/logout", function () {
+      location.reload();
+    } );
+  },
+  checkLogin: function () {
+    $.get( "/api/users/check", function ( data ) {
+      if ( data.res_code === 0 ) {
+        $( ".login_success" ).removeClass( "hide" ).prev( "ul" ).hide();
+        $( ".login_success a:first" ).text( "欢迎您:" + data.res_body.username );
+      }
+    }, "json" );
+   }
 } );

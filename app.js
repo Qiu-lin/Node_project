@@ -4,12 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-// var indexRouter = require( './routes/index' );
+var cookieSession = require("cookie-session");
 
+// var indexRouter = require( './routes/index' );
 var usersRouter = require( './routes/users' );
 var posRouter = require( "./routes/position" );
-
-
 
 var app = express();
 
@@ -22,6 +21,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+/**
+ * 使用cookie-session中间件
+ */
+app.use( cookieSession( {
+  name: "session",
+  secret: "adgsdfhhadsopnmfa",
+  maxAge: 15 * 60000
+} ) );
 
 /*************使用路由中间件****************/
 // app.use('/', indexRouter);

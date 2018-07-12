@@ -19,7 +19,9 @@ const userModel = {
       success( userinfo );
      });
   },
-  find:function () {  }
+  find: function ( userinfo, success, error ) {
+    $user.find( userinfo ).then( success, error );
+   }
 }
 
 module.exports = userModel;
