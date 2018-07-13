@@ -36,8 +36,6 @@ const userController = {
   },
   checkLogin: function ( req, res, next ) {
     var user = req.session.loginUser;
-    console.log(req.session);
-
     if ( user ) {
       res.json( {
         res_code: 0,
@@ -67,7 +65,6 @@ const userController = {
           res_body: {}
         } );
       } );
-  },
-  // check: function () { }
+  }
 };
 module.exports = userController;

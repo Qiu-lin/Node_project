@@ -12,41 +12,45 @@
 <body>
   <!-- 头部导航 -->
   <div class="container header"></div>
-  <div class="container">
-    <h4 class="pull-left" style="margin-top: 0px;margin-bottom: 0px;line-height: 34px;">职位管理</h4>
-    <a type="button" class="btn btn-primary pull-right addButton" data-toggle="modal" data-target="#addPosModal">添加</a>
+  <div class="container hidden noAccess">
+    <div class="alert alert-danger text-center " role="alert">提示:&nbsp;&nbsp;没有权限,登陆后才能查看</div>
   </div>
-  <div class="table-responsive container">
-    <table class="table table-bordered table-hover pos_tab">
-      <thead>
-        <tr>
-          <th>序号</th>
-          <th>公司logo</th>
-          <th>职位名称</th>
-          <th>公司名称</th>
-          <th>工作经验</th>
-          <th>职位类型</th>
-          <th>工作地点</th>
-          <th>职位薪资</th>
-          <th colspan="2">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 动态渲染 -->
-      </tbody>
-    </table>
+  <div class="container hidden contBox">
+    <div class="container">
+      <h4 class="pull-left" style="margin-top: 0px;margin-bottom: 0px;line-height: 34px;">职位管理</h4>
+      <a type="button" class="btn btn-primary pull-right addButton" data-toggle="modal" data-target="#addPosModal">添加</a>
+    </div>
+    <div class="table-responsive container">
+      <table class="table table-bordered table-hover pos_tab">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>公司logo</th>
+            <th>职位名称</th>
+            <th>公司名称</th>
+            <th>工作经验</th>
+            <th>职位类型</th>
+            <th>工作地点</th>
+            <th>职位薪资</th>
+            <th colspan="2">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 动态渲染 -->
+        </tbody>
+      </table>
 
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        <li  class="active"><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-      </ul>
-    </nav>
+      <nav aria-label="Page navigation ">
+        <ul class="pagination pull-right">
+          <li  class="active"><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+        </ul>
+      </nav>
+    </div>
   </div>
-
   <script type="text/html" id="position_list_temp">
     {{each list pos index}}
     <tr>

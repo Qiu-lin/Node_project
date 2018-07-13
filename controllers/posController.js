@@ -94,7 +94,7 @@ const posController = {
         res_body: {}
       } )
     });
-   }
+  }
 
 };
 module.exports = posController;

@@ -1,9 +1,9 @@
-function loginModal() {
+function LoginModal() {
   this.creatDom();
   this.addListener();
 }
 
-loginModal.template = `<div class="modal fade" tabindex="-1" role="dialog" id="loginModal">
+LoginModal.template = `<div class="modal fade" tabindex="-1" role="dialog" id="loginModal">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
     <div class="modal-header">
@@ -33,22 +33,31 @@ loginModal.template = `<div class="modal fade" tabindex="-1" role="dialog" id="l
 </div>
 </div>`;
 
-$.extend( loginModal.prototype, {
+$.extend( LoginModal.prototype, {
   creatDom: function () {
-    $( loginModal.template ).appendTo( "body" );
+    $( LoginModal.template ).appendTo( "body" );
   },
   addListener: function () {
     $( ".btn_login" ).on( "click",this.handleLogin);
   },
   handleLogin: function () {
-    $.post( "/api/users/login", $( ".login_form" ).serialize(), function ( data ) {
+    $.post( "/api/users/login", $( ".login_form" ).serialize(),  ( data )=> {
       if ( data.res_code === 0 ) {
         $( ".login_success" ).removeClass( "hide" ).prev( "ul" ).hide();
-        $( ".longin_success a:first" ).text( "欢迎您:" + data.res_body.username );
+        $( ".login_success a:first" ).text( "欢迎您:" + data.res_body.username );
+        $( ".contBox" ).removeClass( "hidden" ).siblings( ".noAccess" ).hide();
         $( "#loginModal" ).modal( "hide" );
+        $.get( "/api/positions/list", { pageIndex: 1 }, function ( data ) {
+          if ( data.res_code === 0 ) {
+            const html = template( "position_list_temp", { list: data.res_body } );
+            $( ".pos_tab tbody" ).html( html );
+          }
+        }, "json" )
       } else {
-        $( ".longin_error" ).removeClass( "hide" );
+        $( ".login_error" ).removeClass( "hide" );
       }
     }, "json" );
-   }
+  },
+
+
 } );

@@ -49,7 +49,7 @@ $.extend( header.prototype, {
     $( header.template ).appendTo( ".header" );
   },
   creatLoginModal: function () {
-    new loginModal();
+    new LoginModal();
   },
   creatRegistModal: function () {
     new registModal();

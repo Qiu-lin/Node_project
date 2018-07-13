@@ -1,16 +1,30 @@
 function Position() {
   this.loadHeader();
-  this.listByPage( 1 );
   this.addListener();
+  this.check();
 }
 $.extend( Position.prototype, {
+  check: function () {
+    $.get( "/api/users/check", ( data ) => {
+      if ( data.res_code === -1 ) {
+        $( ".noAccess" ).removeClass("hidden");
+      }
+      else {
+        $( ".noAccess" ).hide();
+        $( ".contBox" ).removeClass( "hidden" );
+        this.listByPage( 1 );
+      }
+    },"json" )
+  },
   loadHeader: function () {
     new header();
     $( "#position-nav ul:first li:last" ).addClass( "active" ).siblings().removeClass( "active" );
   },
   addListener: function () {
     const $this = this;
-    $( ".btn_add_pos" ).on( "click", this.handleAddPostion);
+    //添加职位
+    $( ".btn_add_pos" ).on( "click", this.handleAddPostion );
+    //点击分页按钮
     $( ".pagination" ).on( "click", "li", function () {
       $( this ).addClass( "active" ).siblings().removeClass( "active" );
       const currentPage = $( this ).find( "a" ).text();
@@ -77,7 +91,6 @@ $.extend( Position.prototype, {
         }
       }, "json" );
     } );
-
   },
 
   /**********************************/
