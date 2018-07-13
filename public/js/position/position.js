@@ -5,7 +5,6 @@ function Position() {
 }
 $.extend( Position.prototype, {
   loadHeader: function () {
-    //console.log("haha")
     new header();
     $( "#position-nav ul:first li:last" ).addClass( "active" ).siblings().removeClass( "active" );
   },
@@ -18,13 +17,11 @@ $.extend( Position.prototype, {
       $this.listByPage( currentPage );
     } );
 
-    /* 修改职位信息 */
+    // 弹出模态框,将服务器信息渲染进模态框
     $( "tbody" ).on( "click", ".modifyPos a", function () {
       let currPosId = $( this ).parent().siblings( ".currID" ).text();
-      console.log( currPosId );
       $.get( "/api/positions/find", { id: currPosId }, function ( data ) {
         const list = { company, logo, experience, position, salary, site, type, _id } = data.res_body[ 0 ];
-        console.log( list.logo );
         if (list.logo==undefined) {
           $( "#logoImg" ).hide();
         }
@@ -37,27 +34,37 @@ $.extend( Position.prototype, {
         $( "#modifyPosSite" ).val( list.site );
         $( "#modifyPosSalary" ).val( list.salary );
       }, "json" );
-      $( ".btn_modify_pos" ).on( "click", function () {
-        var formData = new FormData( $( ".modifyPosForm" ).get( 0 ) );
-        $.ajax( {
-          type: "post",
-          url: "/api/positions/modify",
-          data: formData,
-          processData: false,
-          contentType: false,
-          dataType: "json",
-          success: function ( data ) {
-            if ( data.res_code === 0 ) {
-              $( "#addPosModal" ).modal( "hide" );
-            }
-            else {
-              $( ".add_pos_error" ).removeClass( "hide" );
-            }
-          }
-        } );
-      } );
     } );
 
+    /* 修改职位信息 */
+
+    $( ".btn_modify_pos" ).on( "click", function () {
+      // $( ".modifyPosForm" )[0].reset();
+      const formData = new FormData( $( ".modifyPosForm" ).get( 0 ) );
+      const $logo = formData.get( "logo" ).size;
+      if ( !$logo ) {
+        const $src = $( "#logoImg" ).attr( "src" );
+        formData.append( "newLogo", $src );
+      }
+      $.ajax( {
+        type: "post",
+        url: "/api/positions/modify",
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function ( data ) {
+          if ( data.res_code === 0 ) {
+            $( "#modifyModal" ).modal( "hide" );
+            const currentPage = $( ".pagination .active a" ).text();
+            $this.listByPage( currentPage );
+          }
+          else {
+            $( ".modifyPosErr" ).removeClass( "hide" );
+          }
+        }
+      } );
+    } );
     /**
      * 删除职位记录
      */
@@ -66,8 +73,6 @@ $.extend( Position.prototype, {
       $.get( "/api/positions/delete", { id: currPosId }, function ( data ) {
         if (data.res_code===0) {
           const currentPage = $( ".pagination .active a" ).text();
-          console.log(currentPage);
-
           $this.listByPage( currentPage );
         }
       }, "json" );
@@ -88,6 +93,8 @@ $.extend( Position.prototype, {
       success: function ( data ) {
         if ( data.res_code === 0 ) {
           $( "#addPosModal" ).modal( "hide" );
+          const currentPage = $( ".pagination .active a" ).text();
+          $this.listByPage( currentPage );
         }
         else {
           $( ".add_pos_error" ).removeClass( "hide" );

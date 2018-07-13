@@ -14,7 +14,7 @@
   <div class="container header"></div>
   <div class="container">
     <h4 class="pull-left" style="margin-top: 0px;margin-bottom: 0px;line-height: 34px;">职位管理</h4>
-    <a type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addPosModal">添加</a>
+    <a type="button" class="btn btn-primary pull-right addButton" data-toggle="modal" data-target="#addPosModal">添加</a>
   </div>
   <div class="table-responsive container">
     <table class="table table-bordered table-hover pos_tab">
@@ -131,11 +131,11 @@
         </div>
         <div class="modal-body">
           <img src="/img/logo.png" class="img-rounded center-block" id="logoImg" style="width: 80px;">
-          <div class="alert alert-danger hide add_pos_error" role="alert">职位修改失败，请稍后重试...</div>
+          <div class="alert alert-danger hide modifyPosErr" role="alert">职位修改失败，请稍后重试...</div>
           <form class="modifyPosForm">
             <div class="form-group" style="display: none;">
               <label for="modifyPosID">ID</label>
-              <input type="text" class="form-control" name="id" id="modifyPosID" >
+              <input type="text" class="form-control" name="id" id="modifyPosID" readonly="readonly">
             </div>
             <div class="form-group">
               <label for="modifyPosLogo">修改公司logo</label>

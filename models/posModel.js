@@ -31,9 +31,22 @@ const posModel = {
   findById:function (id,success,error) {
     $position.find( { _id:id } ).then( success, error );
   },
+  update: function ( positionInfo, success, error ) {
+    $position.updateOne( { _id: positionInfo.id }, {
+      $set:
+      {
+        position: positionInfo.position,
+        company: positionInfo.company,
+        salary: positionInfo.salary,
+        site: positionInfo.site,
+        experience: positionInfo.experience,
+        type: positionInfo.type,
+        logo:positionInfo.logo||positionInfo.newLogo
+      }
+    } ).then( success, error );
+   },
   deleteById:function (id,success,error) {
     $position.deleteOne( { _id:id } ).then( success, error );
-
   }
 }
 module.exports = posModel;
