@@ -1,4 +1,5 @@
 const posModel = require( "../models/posModel" );
+const fs = require( "fs" );
 
 const posController = {
   add: function ( req, res, next ) {
@@ -6,10 +7,6 @@ const posController = {
     let logo = "";
     if ( req.file )
       logo = "/upload/" + req.file.filename;
-
-    console.log({ position, company, salary, logo,site,experience,type });
-
-
     posModel.save({ position, company, salary, logo,site,experience,type },
       ( data ) => {
         res.json( {
@@ -59,12 +56,22 @@ const posController = {
     } );
   },
   modify: function ( req, res, next ) {
-    const { position, company, salary, site, experience, type, id, newLogo } = req.body;
-    let logo = null;
+    const { position, company, salary, site, experience, type, id, oldLogo } = req.body;
+    let logo = oldLogo;
+    //判断是否请求头里是否有文件信息
     if ( req.file ) {
+      //添加新logo路径信息
       logo = "/upload/" + req.file.filename;
+      //在目录中删除原来logo文件
+      fs.unlink( "./public"+oldLogo, function ( err ) {
+        if ( err ) {
+          return console.log(err);
+        }
+        console.log("Modify Function: delete oldLogo success!");
+      } );
     }
-    posModel.update( { position, company, salary, site, experience, type, id, newLogo,logo },
+
+    posModel.update( { position, company, salary, site, experience, type, id,logo },
       ( data ) => {
         res.json( {
           res_code: 0,
@@ -80,7 +87,16 @@ const posController = {
       } );
   },
   delete: function ( req, res, next ) {
-    const {id}  = req.query;
+    const { id, logo } = req.query;
+    //删除此职位信息中的logo文件
+    if ( logo ) {
+      fs.unlink( "./public"+logo, function ( err ) {
+        if ( err ) {
+          return console.log(err);
+        }
+        console.log("delete logo success!");
+      } );
+    }
     posModel.deleteById( id, (data)=> {
       res.json( {
         res_code: 0,

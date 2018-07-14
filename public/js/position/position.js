@@ -2,6 +2,7 @@ function Position() {
   this.loadHeader();
   this.addListener();
   this.check();
+  this.listByPage();
 }
 $.extend( Position.prototype, {
   check: function () {
@@ -22,8 +23,10 @@ $.extend( Position.prototype, {
   },
   addListener: function () {
     const $this = this;
+
     //添加职位
     $( ".btn_add_pos" ).on( "click", this.handleAddPostion );
+
     //点击分页按钮
     $( ".pagination" ).on( "click", "li", function () {
       $( this ).addClass( "active" ).siblings().removeClass( "active" );
@@ -31,34 +34,36 @@ $.extend( Position.prototype, {
       $this.listByPage( currentPage );
     } );
 
-    // 弹出模态框,将服务器信息渲染进模态框
+    // 弹出模态框,将当前职位信息渲染进模态框
     $( "tbody" ).on( "click", ".modifyPos a", function () {
       let currPosId = $( this ).parent().siblings( ".currID" ).text();
       $.get( "/api/positions/find", { id: currPosId }, function ( data ) {
-        const list = { company, logo, experience, position, salary, site, type, _id } = data.res_body[ 0 ];
-        if (list.logo==undefined) {
-          $( "#logoImg" ).hide();
+        const { company, logo, experience, position, salary, site, type, _id } = data.res_body[ 0 ];
+        if (logo) {
+          $( "#logoImg" ).removeClass("hidden");
         }
-        $( "#logoImg" ).attr( "src", list.logo );
-        $( "#modifyPosID" ).val( list._id );
-        $( "#modifyPosName" ).val( list.position );
-        $( "#modifyPosCompany" ).val( list.company );
-        $( "#modifyPosExperience" ).val( list.experience );
-        $( "#modifyPosType" ).val( list.type );
-        $( "#modifyPosSite" ).val( list.site );
-        $( "#modifyPosSalary" ).val( list.salary );
+        $( "#logoImg" ).attr( "src", logo );
+        $( "#modifyPosID" ).val( _id );
+        $( "#modifyPosName" ).val( position );
+        $( "#modifyPosCompany" ).val( company );
+        $( "#modifyPosExperience" ).val( experience );
+        $( "#modifyPosType" ).val( type );
+        $( "#modifyPosSite" ).val( site );
+        $( "#modifyPosSalary" ).val( salary );
       }, "json" );
     } );
 
     /* 修改职位信息 */
-
     $( ".btn_modify_pos" ).on( "click", function () {
-      // $( ".modifyPosForm" )[0].reset();
+      //获取form表单数据
       const formData = new FormData( $( ".modifyPosForm" ).get( 0 ) );
+      //获取上传input file控件上传文件的大小
       const $logo = formData.get( "logo" ).size;
+      //如果file 没有选择上传logo文件,则上传原来logo路径
       if ( !$logo ) {
         const $src = $( "#logoImg" ).attr( "src" );
-        formData.append( "newLogo", $src );
+        //向formData里添加新值
+        formData.append( "oldLogo", $src );
       }
       $.ajax( {
         type: "post",
@@ -84,7 +89,9 @@ $.extend( Position.prototype, {
      */
     $( "tbody" ).on( "click", ".delete a", function () {
       let currPosId = $( this ).parent().siblings( ".currID" ).text();
-      $.get( "/api/positions/delete", { id: currPosId }, function ( data ) {
+      let currLogoPath = $( this ).parent().siblings( ).find("img").attr("src");
+      console.log(currLogoPath);
+      $.get( "/api/positions/delete", { id: currPosId,logo:currLogoPath }, function ( data ) {
         if (data.res_code===0) {
           const currentPage = $( ".pagination .active a" ).text();
           $this.listByPage( currentPage );
@@ -94,7 +101,16 @@ $.extend( Position.prototype, {
   },
 
   /**********************************/
-  handleAddPostion: function () {
+  listByPage: function ( currentPage ) {
+    currentPage = currentPage || 1;
+    $.get( "/api/positions/list", { pageIndex: currentPage }, function ( data ) {
+      if ( data.res_code === 0 ) {
+        const html = template( "position_list_temp", { list: data.res_body } );
+        $( ".pos_tab tbody" ).html( html );
+      }
+    }, "json" );
+   },
+  handleAddPostion:function(){
     var formData = new FormData( $( ".add_pos_form" ).get( 0 ) );
     $.ajax( {
       type: "post",
@@ -103,27 +119,22 @@ $.extend( Position.prototype, {
       processData: false,
       contentType: false,
       dataType: "json",
-      success: function ( data ) {
+      success: ( data )=> {
         if ( data.res_code === 0 ) {
           $( "#addPosModal" ).modal( "hide" );
-          const currentPage = $( ".pagination .active a" ).text();
-          $this.listByPage( currentPage );
+          const curPage = $( ".pagination .active a" ).text();
+          $.get( "/api/positions/list", { pageIndex: curPage }, function ( data ) {
+            if ( data.res_code === 0 ) {
+              const html = template( "position_list_temp", { list: data.res_body } );
+              $( ".pos_tab tbody" ).html( html );
+            }
+          }, "json" );
         }
         else {
           $( ".add_pos_error" ).removeClass( "hide" );
         }
       }
     } );
-  },
-  listByPage: function ( currentPage ) {
-    currentPage = currentPage || 1;
-    $.get( "/api/positions/list", { pageIndex: currentPage }, function ( data ) {
-      if ( data.res_code === 0 ) {
-        const html = template( "position_list_temp", { list: data.res_body } );
-        // console.log(res_body);
-        $( ".pos_tab tbody" ).html( html );
-      }
-    }, "json" );
-   }
+  }
 } );
 new Position();
